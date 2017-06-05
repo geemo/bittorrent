@@ -2,7 +2,6 @@ package bencode
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 )
 
@@ -107,7 +106,6 @@ func (t *Torrent) string() (string, error) {
 		s      string
 	)
 	length, err = t.int()
-	fmt.Println("parse string length:", length)
 	if err != nil {
 		return s, err
 	}
