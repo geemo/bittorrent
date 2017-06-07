@@ -22,9 +22,8 @@ type Map map[string]Any
 type List []Any
 
 // Decode string
-func Decode(s string) (Any, error) {
-	var bs = []byte(s)
-	var t = decodeStatus{bs, 0}
+func Decode(b []byte) (Any, error) {
+	var t = decodeStatus{b, 0}
 	return t.value()
 }
 
@@ -222,17 +221,21 @@ type encodeStatus struct {
 }
 
 // Encode Value
-func Encode(v Any) (string, error) {
+func Encode(v Any) ([]byte, error) {
 	var (
 		e   encodeStatus
 		err error
 	)
 	err = e.valueTo(v)
-	return e.toString(), err
+	return e.toBytes(), err
 }
 
 func (e *encodeStatus) toString() string {
 	return e.buf.String()
+}
+
+func (e *encodeStatus) toBytes() []byte {
+	return e.buf.Bytes()
 }
 
 func (e *encodeStatus) valueTo(v Any) error {

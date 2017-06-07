@@ -8,7 +8,7 @@ func TestDecodeBasic(t *testing.T) {
 		"i3e":    3,
 	}
 	for str, value := range testData {
-		var v, _ = Decode(str)
+		var v, _ = Decode([]byte(str))
 		if v != value {
 			t.Error("decode torrent error")
 		}
@@ -17,7 +17,7 @@ func TestDecodeBasic(t *testing.T) {
 
 func TestDecodeList(t *testing.T) {
 	var l = List{"spam", "eggs"}
-	var value, _ = Decode("l4:spam4:eggse")
+	var value, _ = Decode([]byte("l4:spam4:eggse"))
 	if expect, ok := value.(List); ok {
 		for index, v := range l {
 			if v != expect[index] {
@@ -29,7 +29,7 @@ func TestDecodeList(t *testing.T) {
 
 func TestDecodeMap(t *testing.T) {
 	var m = Map{"cow": "moo", "spam": "eggs"}
-	var value, _ = Decode("d3:cow3:moo4:spam4:eggse")
+	var value, _ = Decode([]byte("d3:cow3:moo4:spam4:eggse"))
 	if expect, ok := value.(Map); ok {
 		for k, v := range m {
 			if v != expect[k] {
@@ -45,8 +45,8 @@ func TestEncodeBasic(t *testing.T) {
 		"i3e":    3,
 	}
 	for str, value := range testData {
-		var s, _ = Encode(value)
-		if s != str {
+		var b, _ = Encode(value)
+		if string(b) != str {
 			t.Error("encode basic error")
 		}
 	}
@@ -55,8 +55,8 @@ func TestEncodeBasic(t *testing.T) {
 func TestEncodeList(t *testing.T) {
 	var l = List{"spam", "eggs"}
 	var str = "l4:spam4:eggse"
-	var s, _ = Encode(l)
-	if s != str {
+	var b, _ = Encode(l)
+	if string(b) != str {
 		t.Error("encode list error")
 	}
 }
@@ -64,8 +64,8 @@ func TestEncodeList(t *testing.T) {
 func TestEncodeMap(t *testing.T) {
 	var m = Map{"cow": "moo", "spam": "eggs"}
 	var str = "d3:cow3:moo4:spam4:eggse"
-	var s, _ = Encode(m)
-	if s != str {
+	var b, _ = Encode(m)
+	if string(b) != str {
 		t.Error("encode map error")
 	}
 }
