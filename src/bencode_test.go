@@ -1,6 +1,9 @@
 package dht
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestDecodeBasic(t *testing.T) {
 	testData := Map{
@@ -62,10 +65,11 @@ func TestEncodeList(t *testing.T) {
 }
 
 func TestEncodeMap(t *testing.T) {
-	var m = Map{"cow": "moo", "spam": "eggs"}
-	var str = "d3:cow3:moo4:spam4:eggse"
+	var m = Map{"cow": "moo"}
+	var str = "d3:cow3:mooe"
 	var b, _ = Encode(m)
 	if string(b) != str {
+		fmt.Println(string(b), str)
 		t.Error("encode map error")
 	}
 }

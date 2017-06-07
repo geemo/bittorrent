@@ -21,6 +21,62 @@ type Map map[string]Any
 // List stuct
 type List []Any
 
+// Value struct
+type Value struct {
+	v Any
+}
+
+func (value *Value) key(k string) *Value {
+	m, ok := value.v.(Map)
+	if !ok {
+		panic("value not type Map")
+	}
+	return &Value{m[k]}
+}
+
+func (value *Value) index(i int) *Value {
+	l, ok := value.v.(List)
+	if len(l) <= i {
+		panic("index out of list")
+	}
+	if !ok {
+		panic("value not type list")
+	}
+	return &Value{l[i]}
+}
+
+func (value *Value) toList() List {
+	l, ok := value.v.(List)
+	if !ok {
+		panic("value not type list")
+	}
+	return l
+}
+
+func (value *Value) toMap() Map {
+	m, ok := value.v.(Map)
+	if !ok {
+		panic("value not type map")
+	}
+	return m
+}
+
+func (value *Value) toInt() int {
+	i, ok := value.v.(int)
+	if !ok {
+		panic("value not type int")
+	}
+	return i
+}
+
+func (value *Value) toString() string {
+	s, ok := value.v.(string)
+	if !ok {
+		panic("value not type string")
+	}
+	return s
+}
+
 // Decode string
 func Decode(b []byte) (Any, error) {
 	var t = decodeStatus{b, 0}
