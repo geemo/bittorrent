@@ -47,6 +47,8 @@ func (k *Krpc) send(data Map) (Map, error) {
 	return msg.(Map), nil
 }
 
+func getTransactionID() {}
+
 func ping() {}
 
 func findNode() {}
