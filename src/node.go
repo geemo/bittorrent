@@ -1,7 +1,6 @@
 package dht
 
 import (
-	"bytes"
 	"encoding/binary"
 	"errors"
 	"fmt"
@@ -9,30 +8,20 @@ import (
 	"strings"
 )
 
-// ID of Node
-type ID *BitMap
-
 // Node info struct
 type Node struct {
-	id ID
-	ip string
-	// 67.215.246.10
+	id   *BitMap
+	ip   string
 	port uint16
-	// 80
-}
-
-func bufferWriteUint64(buf bytes.Buffer, i uint64) {
-
 }
 
 // RandomID get
-func RandomID(length int) (ID, error) {
+func RandomID() (*BitMap, error) {
 	var (
-		id  ID
+		id  *BitMap
 		err error
 	)
-	for i := 0; i < length; i++ {
-	}
+
 	return id, err
 }
 
