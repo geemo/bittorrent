@@ -47,7 +47,10 @@ func TestSend(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(nodes)
+	fmt.Println([]byte("mnopqrstuvwxyz123456"))
+	for _, node := range nodes {
+		fmt.Println(node)
+	}
 	if err != nil {
 		fmt.Println(err)
 	}

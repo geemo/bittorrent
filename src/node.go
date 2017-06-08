@@ -10,7 +10,7 @@ import (
 )
 
 // ID of Node
-type ID []byte
+type ID *BitMap
 
 // Node info struct
 type Node struct {
@@ -74,7 +74,7 @@ func DecodeNodes(s string) ([]Node, error) {
 			break
 		}
 
-		id := b[s:ipStart]
+		id := NewBitMapfromBytes(b[s:ipStart])
 		var ip []string
 		for _, ipByte := range b[ipStart:portStart] {
 			ip = append(ip, strconv.Itoa(int(ipByte)))
