@@ -109,6 +109,16 @@ func (t *Table) Save() {}
 // Load Table
 func (t *Table) Load(n Node) {}
 
+// Closest Node get
+func (t *Table) Closest(n Node) {
+
+}
+
+func (t *Table) closest(tn *TableNode, n Node, deep int) Node {
+	// bit := n.id.Bit(deep)
+	return n
+}
+
 // Print table
 func (t *Table) Print() {
 	t.print(t.root, "")
