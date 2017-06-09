@@ -1,6 +1,7 @@
 package dht
 
 import (
+	"bytes"
 	"encoding/binary"
 	"errors"
 	"fmt"
@@ -12,7 +13,24 @@ import (
 type Node struct {
 	id   *BitMap
 	ip   string
-	port uint16
+	port int
+}
+
+var chars = "0123456789abcdef"
+
+// IDToHex ..
+func IDToHex(id *BitMap) string {
+	var buf bytes.Buffer
+	for _, b := range id.data {
+		buf.WriteByte(chars[b>>4])
+		buf.WriteByte(chars[b&0x0f])
+	}
+	return buf.String()
+}
+
+// HexToID ..
+func HexToID(hex string) *BitMap {
+	return nil
 }
 
 // RandomID get
@@ -68,7 +86,7 @@ func DecodeNodes(s string) ([]Node, error) {
 		for _, ipByte := range b[ipStart:portStart] {
 			ip = append(ip, strconv.Itoa(int(ipByte)))
 		}
-		port := binary.BigEndian.Uint16(b[portStart:e])
+		port := int(binary.BigEndian.Uint16(b[portStart:e]))
 		node := Node{id, strings.Join(ip, "."), port}
 		nodes = append(nodes, node)
 		start++

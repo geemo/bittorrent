@@ -64,6 +64,24 @@ func (bitMap *BitMap) Unset(index int) {
 	bitMap.set(index, 0)
 }
 
+// Prefix two bitmap
+func (bitMap *BitMap) Prefix(compareBitMap *BitMap) *BitMap {
+	if bitMap.Size != compareBitMap.Size {
+		panic("two bit map have differece size, can't get prefix")
+	}
+	prefixBitMap := NewBitMap(bitMap.Size)
+	for index := 0; index < bitMap.Size; index++ {
+		bit := bitMap.Bit(index)
+		if bit == compareBitMap.Bit(index) {
+			prefixBitMap.set(index, bit)
+		} else {
+			prefixBitMap.Size = index
+			return prefixBitMap
+		}
+	}
+	return prefixBitMap
+}
+
 // String []byte to binary string
 func (bitMap *BitMap) String() string {
 	div, mod := bitMap.Size/8, bitMap.Size%8

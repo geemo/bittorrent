@@ -6,7 +6,16 @@ func TestBitMap(t *testing.T) {
 	b := []byte{byte(0xfe)}
 	s := "11111110"
 
+	cb := []byte{byte(0xde)}
+	//11011110
+
 	bitMap := NewBitMapfromBytes(b)
+	cBitMap := NewBitMapfromBytes(cb)
+	preBitMap := bitMap.Prefix(cBitMap)
+	if preBitMap.String() != "11" || preBitMap.Size != 2 {
+		t.Error("bit map prefix error")
+	}
+
 	if bitMap.String() != s {
 		t.Error("bit map from bytes error")
 	}
