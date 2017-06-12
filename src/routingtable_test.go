@@ -1,9 +1,6 @@
 package dht
 
-import (
-	"fmt"
-	"testing"
-)
+import "testing"
 
 func TestTableInsert(t *testing.T) {
 	id := NewBitMapfromBytes([]byte{0x55, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 49, 50, 51, 52, 53, 54})
@@ -33,9 +30,12 @@ func TestTableInsert(t *testing.T) {
 	for _, node := range nodes {
 		table.Insert(node)
 	}
-	fmt.Println(selfNode.id.String())
-	println("=====")
-	table.Print()
+
+	n := Node{NewBitMapfromBytes([]byte{89, 161, 15, 185, 131, 115, 212, 23, 177, 175, 67, 151, 220, 192, 34, 179, 3, 155, 108, 33}), "190.142.196.109", 8916}
+	resultNodes := table.Closest(n)
+	if n.id.RawString() != resultNodes[0].id.RawString() {
+		t.Error("table find node error")
+	}
 }
 
 func printNodes(nodes []Node) {

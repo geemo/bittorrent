@@ -70,7 +70,6 @@ func (t *Table) insert(tn *TableNode, n Node, deep int) {
 				for _, node := range nodes {
 					t.insert(tn, node, deep)
 				}
-				fmt.Println(prefix.String(), prefix.Size, deep)
 			}
 		}
 		return
@@ -109,14 +108,80 @@ func (t *Table) Save() {}
 // Load Table
 func (t *Table) Load(n Node) {}
 
-// Closest Node get
-func (t *Table) Closest(n Node) {
-
+// Closest 获得与 n 相比最近 k 个 node
+func (t *Table) Closest(n Node) []Node {
+	nodes := t.closest(t.root, n, []path{}, []Node{}, 0)
+	for _, node := range nodes {
+		if node.id.RawString() == n.id.RawString() {
+			return []Node{node}
+		}
+	}
+	return nodes
 }
 
-func (t *Table) closest(tn *TableNode, n Node, deep int) Node {
-	// bit := n.id.Bit(deep)
-	return n
+type path struct {
+	tn   *TableNode
+	deep int
+}
+
+func popPath(slice []path) (path, []path) {
+	lenght := len(slice)
+	n := slice[lenght-1]
+	newSlice := slice[:lenght-1]
+	return n, newSlice
+}
+
+func (t *Table) closest(tn *TableNode, n Node, p []path, nodes []Node, deep int) []Node {
+	// 有 bucket
+	if tn.bucket != nil {
+		nodes = append(nodes, tn.bucket.nodes...)
+	}
+
+	// 拿到 k 个 node 返回
+	if len(nodes) >= t.k {
+		return nodes[:t.k]
+	}
+
+	bit := n.id.Bit(deep)
+
+	// 优先相同前缀
+	if bit == leftValue && tn.left != nil {
+		if tn.right != nil {
+			p = append(p, path{tn.right, deep + 1})
+		}
+		return t.closest(tn.left, n, p, nodes, deep+1)
+	}
+
+	if bit == rightValue && tn.right != nil {
+		if tn.left != nil {
+			p = append(p, path{tn.left, deep + 1})
+		}
+		return t.closest(tn.right, n, p, nodes, deep+1)
+	}
+
+	// 没有相同前缀，随便挑选分支
+	if tn.left != nil {
+		if tn.right != nil {
+			p = append(p, path{tn.right, deep + 1})
+		}
+		return t.closest(tn.left, n, p, nodes, deep+1)
+	}
+
+	if tn.right != nil {
+		if tn.left != nil {
+			p = append(p, path{tn.left, deep + 1})
+		}
+		return t.closest(tn.right, n, p, nodes, deep+1)
+	}
+
+	// 没有可选分支， 返回之前分支
+	if len(p) > 0 {
+		onePath, newPath := popPath(p)
+		return t.closest(onePath.tn, n, newPath, nodes, onePath.deep)
+	}
+
+	// 什么都没有，就返回 nodes
+	return nodes
 }
 
 // Print table
