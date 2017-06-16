@@ -100,7 +100,15 @@ func (t *Table) insert(tn *TableNode, n Node, deep int) {
 func (t *Table) Delete(n Node) {}
 
 // Find TableNode
-func (t *Table) Find(n Node) {}
+func (t *Table) Find(n Node) (Node, bool) {
+	nodes := t.Closest(n)
+	for _, node := range nodes {
+		if node.id.RawString() == n.id.RawString() {
+			return node, true
+		}
+	}
+	return Node{}, false
+}
 
 // Save Table
 func (t *Table) Save() {}
@@ -110,13 +118,7 @@ func (t *Table) Load(n Node) {}
 
 // Closest 获得与 n 相比最近 k 个 node
 func (t *Table) Closest(n Node) []Node {
-	nodes := t.closest(t.root, n, []path{}, []Node{}, 0)
-	for _, node := range nodes {
-		if node.id.RawString() == n.id.RawString() {
-			return []Node{node}
-		}
-	}
-	return nodes
+	return t.closest(t.root, n, []path{}, []Node{}, 0)
 }
 
 type path struct {

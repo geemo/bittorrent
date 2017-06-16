@@ -32,8 +32,8 @@ func TestTableInsert(t *testing.T) {
 	}
 
 	n := Node{NewBitMapfromBytes([]byte{89, 161, 15, 185, 131, 115, 212, 23, 177, 175, 67, 151, 220, 192, 34, 179, 3, 155, 108, 33}), "190.142.196.109", 8916}
-	resultNodes := table.Closest(n)
-	if n.id.RawString() != resultNodes[0].id.RawString() {
+	resultNode, _ := table.Find(n)
+	if n.id.RawString() != resultNode.id.RawString() {
 		t.Error("table find node error")
 	}
 }
